@@ -11,5 +11,14 @@ The architecture is as follows:
 
 Routes -> Controller -> Services -> Repository
 
+If I had to add some improvements it would definitely be:
+
+Testing
+Error handling
+Logging
+Better design in the frontend
+
+The use case this is made for is to upload a csv with similar structure as the one given to me via an api call, and wait for it to both parse and reload.
+
 
 
