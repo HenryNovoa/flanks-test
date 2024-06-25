@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { usePositions } from '../../context/PositionsContext';
 
 const PositionTable = () => {
-  const { positions } = usePositions();
+  const { positions, page, totalPages, setPage } = usePositions();
   const [expandedRows, setExpandedRows] = useState([]);
 
   const handleRowClick = (positionId) => {
@@ -14,10 +14,21 @@ const PositionTable = () => {
     setExpandedRows(newExpandedRows);
   };
 
+
+  const handlePreviousPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
+
   const renderItem = (position) => {
     const isExpanded = expandedRows.includes(position.id);
 
     return (
+    
       <div key={position.id}>
         <div 
           onClick={() => handleRowClick(position.id)}
@@ -99,15 +110,32 @@ const PositionTable = () => {
                 </tr>
               </tbody>
             </table>
+
+        <div>
+       
+      </div>
+      
           </div>
+
+   
         )}
       </div>
+
+       
+        
     );
   };
 
   return (
     <div>
       {positions.map(position => renderItem(position))}
+             <button onClick={handlePreviousPage} disabled={page === 1}>
+          Previous
+        </button>
+        <span>{`Page ${page} of ${totalPages}`}</span>
+        <button onClick={handleNextPage} disabled={page === totalPages}>
+          Next
+        </button>
     </div>
   );
 };

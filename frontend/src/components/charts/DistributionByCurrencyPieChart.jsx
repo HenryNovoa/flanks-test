@@ -1,21 +1,13 @@
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
-import { usePositions } from '../../context/PositionsContext';
+import { useCurrencyDistribution } from '../../hooks/useCurrencyDistribution';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const DistributionByCurrencyPieChart = () => {
-  const { positions } = usePositions();
+  const { currencyDistribution: data, loading, error } = useCurrencyDistribution();
 
-  const currencyDistribution = positions.reduce((acc, position) => {
-    acc[position.currency] = (acc[position.currency] || 0) + position.balance;
-    return acc;
-  }, {});
-
-  console.log(currencyDistribution)
-  const data = Object.keys(currencyDistribution).map(currency => ({
-    name: currency,
-    value: currencyDistribution[currency],
-  }));
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error loading data</p>;
 
   return (
     <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>

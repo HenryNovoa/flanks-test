@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { uploadFile, usePositions } from '../context/PositionsContext';
+import { uploadFile } from '../services/api';
+
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
-  const { refreshPositions } = usePositions();
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -20,7 +20,7 @@ const FileUpload = () => {
 
       if (response.ok) {
         alert('File uploaded successfully');
-        refreshPositions();
+        window.location.reload();
       } else {
         alert('Failed to upload file');
       }

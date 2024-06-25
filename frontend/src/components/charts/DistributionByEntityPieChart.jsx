@@ -1,21 +1,13 @@
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
-import { usePositions } from '../../context/PositionsContext';
+import { useEntityDistribution } from '../../hooks/useEntityDistribution';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const DistributionByEntityPieChart = () => {
-  const { positions } = usePositions();
-
-  const entityDistribution = positions.reduce((acc, position) => {
-    acc[position.Portfolio?.Entity?.name] = (acc[position.Portfolio?.Entity?.name] || 0) + position.balance;
-    return acc;
-  }, {});
-
-  const data = Object.keys(entityDistribution).map(entity => ({
-    name: entity,
-    value: entityDistribution[entity],
-  }));
-
+   const { entityDistribution: data, loading, error } = useEntityDistribution()
+   
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error loading data</p>;
   return (
     <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
      <h3>Distribution by financial entity</h3>

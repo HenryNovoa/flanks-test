@@ -1,20 +1,13 @@
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
-import { usePositions } from '../../context/PositionsContext';
+import { useTypeInvestmentDistribution } from '../../hooks/useTypeInvestmentDistribution';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const DistributionByInvestmentTypePieChart = () => {
-  const { positions } = usePositions();
+    const { typeInvestmentDistribution: data, loading, error } = useTypeInvestmentDistribution();
 
-  const typeDistribution = positions.reduce((acc, position) => {
-    acc[position.type] = (acc[position.type] || 0) + position.balance;
-    return acc;
-  }, {});
-
-  const data = Object.keys(typeDistribution).map(type => ({
-    name: type,
-    value: typeDistribution[type],
-  }));
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error loading data</p>;
 
   return (
     <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>

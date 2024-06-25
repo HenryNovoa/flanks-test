@@ -2,7 +2,7 @@ const { Position, Portfolio, Entity } = require('../models');
 
 class PositionRepository {
     async getAll() {
-        return await Position.findAll({
+        return Position.findAll({
             include: [
                 {
                     model: Portfolio,
@@ -17,6 +17,27 @@ class PositionRepository {
             ],
         });
     }
+
+    async getPaginated({ limit, offset, page }) {
+        const { rows, count } = await Position.findAndCountAll({
+            include: [
+                {
+                    model: Portfolio,
+                    attributes: ['portfolio_id'],
+                    include: [
+                        {
+                            model: Entity,
+                            attributes: ['name']
+                        }
+                    ]
+                }
+            ],
+            limit,
+            offset
+        });
+        return { positions: rows, total: count, totalPages: Math.ceil(count / limit), currentPage: page };
+    }
+
 
     async getById(id) {
         return await Position.findByPk(id, {
@@ -36,4 +57,4 @@ class PositionRepository {
     }
 }
 
-module.exports = new PositionService();
+module.exports = new PositionRepository();
